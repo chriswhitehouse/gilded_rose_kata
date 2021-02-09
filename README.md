@@ -21,36 +21,53 @@ Ruby with Rspec testing framework.
 ## Features
 ### User Stories
 
+Existing features:
+
 ```
-As a ...
-So that...
-I want ...
-```
-```
-As a ...
-So that...
-I want ...
+As a small inn owner
+So that I can keep track of my stock
+I want to maintain an inventory of items
 ```
 ```
-As a ...
-So that...
-I want ...
+As a small inn owner
+So that I know when I need to sell an item by
+I want each item to have a 'SellIn' property
+```
+```
+As a small inn owner
+So that I know the value of an item when I sell it
+I want each item to have a 'Quality' property
+```
+```
+As a small inn owner
+So that I can maintain a current view of quality and sellIn
+I want to be able to update quality of every item in the inventory at the end of each day
 ```
 
+New feature:
+```
+As a small inn owner
+So that I can sell 'conjured' items
+I want each 'conjured' item to degrade in quality twice as fast as normal items
+```
 ### Acceptance Criteria
 
-**Given**
-**And**
-**When**
-**Then**
+- Once the sell by date has passed, Quality degrades twice as fast
+- The Quality of an item is never negative
+- "Aged Brie" actually increases in Quality the older it gets
+- The Quality of an item is never more than 50
+- "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
+- "Backstage passes", like aged brie, increases in Quality as its SellIn value approaches;
+Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but
+Quality drops to 0 after the concert
+- Just for clarification, an item can never have its Quality increase above 50, however "Sulfuras" is a legendary item and as such its Quality is 80 and it never alters.
 
-```
-```
 
 ### Domain Model
 | Nouns     | Activities     |
 | :------------- | :------------- |
-| Item One       | Item Two       |
+| Item       |  name, quality, sell_in, to_s     |
+| Inventory  | update_quality |
 
 ## Code Example
 Before:
