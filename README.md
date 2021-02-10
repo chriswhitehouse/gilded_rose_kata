@@ -136,6 +136,7 @@ Use in irb:
 
 `$ irb`
 `> require './lib/gilded_rose.rb'`
+`> require './lib/item.rb'`
 `> apple = item.new("apple", 10, 10)`
 `> banana = item.new("banana", 20, 5)`
 `> items = [apple, banana]`
