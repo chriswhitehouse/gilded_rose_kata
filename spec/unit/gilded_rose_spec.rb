@@ -57,7 +57,7 @@ describe GildedRose do
     context 'Sulfuras' do
       it '"Sulfuras", being a legendary item, never has to never be sold or decreases in Quality' do
         expect(sulfuras).not_to receive(:quality=)
-        expect(sulfuras).not_to receive(:sell_in=)
+        expect(sulfuras).to receive(:sell_in=).with(sulfuras.sell_in)
         inventory.update_quality
       end
     end
