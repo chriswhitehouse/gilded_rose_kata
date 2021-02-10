@@ -9,7 +9,8 @@ describe 'Feature Tests' do
       Item.new('banana', 2, 4),
       Item.new('Aged Brie', 1, 5),
       Item.new('Sulfuras, Hand of Ragnaros', 1, 80),
-      Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 5)
+      Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 5),
+      Item.new('Conjured', 1, 6)
     ]
   end
 
@@ -43,6 +44,13 @@ describe 'Feature Tests' do
     end
   end
 
+  describe "So that I can sell 'conjured' items" do
+    it "I want each 'conjured' item to degrade in quality twice as fast as normal items" do
+      expect { inventory.update_quality }.to change { items[5].quality }.by(-2)
+      expect { inventory.update_quality }.to change { items[5].quality }.by(-4)
+    end
+  end
+
   describe 'Acceptance Criteria' do
     it 'manages a portfolio of items over time' do
       # First quality_update
@@ -52,6 +60,7 @@ describe 'Feature Tests' do
         .and change { items[2].quality }.by(1)
         .and change { items[3].sell_in }.by(0)
         .and change { items[4].quality }.by(1)
+        .and change { items[5].quality }.by(-2)
 
       # Second quality_update
       expect { inventory.update_quality }
@@ -60,6 +69,7 @@ describe 'Feature Tests' do
         .and change { items[2].quality }.by(2)
         .and change { items[3].quality }.by(0)
         .and change { items[4].quality }.by(2)
+        .and change { items[5].quality }.by(-4)
 
       # Third quality_update
       expect { inventory.update_quality }
@@ -68,6 +78,7 @@ describe 'Feature Tests' do
         .and change { items[2].quality }.by(2)
         .and change { items[3].quality }.by(0)
         .and change { items[4].quality }.by(2)
+        .and change { items[5].quality }.by(0)
 
       3.times { inventory.update_quality }
 
