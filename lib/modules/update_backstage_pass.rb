@@ -1,17 +1,45 @@
 module UpdateBackstagePass
+  MAX_QUALITY = 50
+  MIN_QUALITY = 0
+
+  SELL_IN_UPDATE = -1
+
+  QUALITY_UPDATE_BEFORE_TEN_DAYS = 1
+  QUALITY_UPDATE_BEFORE_FIVE_DAYS = 2
+  QUALITY_UPDATE_BEFORE_ZERO_DAYS = 3
+  QUALITY_UPDATE_AFTER_SELL_BY_DATE = 0
+
+
   def update_quality
-    self.sell_in -= 1
+    update_sell_in
 
-    return unless self.quality < 50 && self.quality.positive?
+    return unless in_quality_update_range
+      self.quality += quality_update_value
+  end
 
+  private
+
+  def update_sell_in
+    self.sell_in += SELL_IN_UPDATE
+  end
+
+  def in_quality_update_range
+    self.quality < MAX_QUALITY && self.quality > MIN_QUALITY
+  end
+
+  def quality_update_value
     if self.sell_in >= 10
-      self.quality += 1
+      QUALITY_UPDATE_BEFORE_TEN_DAYS
     elsif self.sell_in >= 5
-      self.quality += 2
+      QUALITY_UPDATE_BEFORE_FIVE_DAYS
     elsif self.sell_in.positive?
-      self.quality += 3
+      QUALITY_UPDATE_BEFORE_ZERO_DAYS
     else
-      self.quality = 0
+      -self.quality
     end
+  end
+
+  def after_sell_by_date
+    self.sell_in.negative?
   end
 end
