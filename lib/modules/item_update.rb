@@ -1,17 +1,4 @@
-module UpdateAgedBrie
-  MAX_QUALITY = 50
-  MIN_QUALITY = 0
-
-  SELL_IN_UPDATE = -1
-
-  def boundaries
-     [
-    {max: Float::INFINITY, min: 1, rate: 1},
-    {max: 0, min: -Float::INFINITY, rate: 2 },
-    ]
-  end
-
-
+module ItemUpdate
   def update_quality
     if in_quality_update_range
       self.quality += quality_update_value
@@ -23,15 +10,15 @@ module UpdateAgedBrie
   private
 
   def update_sell_in
-    self.sell_in += SELL_IN_UPDATE
+    self.sell_in += singleton_class::SELL_IN_UPDATE
   end
 
   def in_quality_update_range
-    self.quality < MAX_QUALITY && self.quality > MIN_QUALITY
+    self.quality < singleton_class::MAX_QUALITY && self.quality > singleton_class::MIN_QUALITY
   end
 
   def quality_update_value
-    boundaries.each do |boundary|
+    quality_logic.each do |boundary|
       if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
         return boundary[:rate]
       end

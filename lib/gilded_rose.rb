@@ -1,27 +1,26 @@
 # frozen_string_literal: true
-require './lib/modules/update_aged_brie.rb'
-require './lib/modules/update_sulfuras.rb'
-require './lib/modules/update_backstage_pass.rb'
-require './lib/modules/update_normal.rb'
+require './lib/modules/aged_brie_logic.rb'
+require './lib/modules/sulfuras_logic.rb'
+require './lib/modules/normal_logic.rb'
+require './lib/modules/backstage_pass_logic.rb'
+require './lib/modules/item_update.rb'
 # A class for updating items
 class GildedRose
   def initialize(items)
     @items = items
 
     @items.each do |item|
+      item.extend(ItemUpdate)
+
       case item.name
       when 'Aged Brie'
-        item.extend(UpdateAgedBrie)
+        item.extend(AgedBrieLogic)
       when 'Sulfuras, Hand of Ragnaros'
-        item.extend(UpdateSulfuras)
+        item.extend(SulfurasLogic)
       when 'Backstage passes to a TAFKAL80ETC concert'
-        item.extend(UpdateBackstagePass)
+        item.extend(BackstagePassLogic)
       else
-        item.extend(UpdateNormal)
-        item.boundaries([
-                     {max: Float::INFINITY, min: 1, rate: -1},
-                     {max: 0, min: -Float::INFINITY, rate: -2 },
-                     ])
+        item.extend(NormalLogic)
       end
     end
   end
