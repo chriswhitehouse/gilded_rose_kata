@@ -26,7 +26,7 @@ describe GildedRose do
       it 'Once the sell by date has passed, Quality degrades twice as fast' do
         # currently tests implementation rather than behaviour
         allow(apple).to receive(:sell_in).and_return(-1)
-        expect(apple).to receive(:quality=).with(apple.quality - 1).twice
+        expect(apple).to receive(:quality=).with(apple.quality - 2)
         inventory.update_quality
       end
 
@@ -66,15 +66,15 @@ describe GildedRose do
 
       it 'increase in quality by 2 with less than 11, and more than 5, days to sell' do
         # currently tests implementation rather than behaviour
-        allow(backstage_pass).to receive(:sell_in).and_return(10)
-        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 1).twice
+        allow(backstage_pass).to receive(:sell_in).and_return(9)
+        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 2)
         inventory.update_quality
       end
 
       it 'increase in quality by 3 with less than 5, and more than -1, days to sell' do
         # currently tests implementation rather than behaviour
-        allow(backstage_pass).to receive(:sell_in).and_return(5)
-        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 1).exactly(3).times
+        allow(backstage_pass).to receive(:sell_in).and_return(4)
+        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 3)
         inventory.update_quality
       end
 
