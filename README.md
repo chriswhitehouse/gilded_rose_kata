@@ -13,7 +13,7 @@ Travis CI: [![Build Status](https://travis-ci.com/chriswhitehouse/gilded_rose_ka
 Rubocop: [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
 
 ## Screenshots
-Include logo/demo screenshot etc.
+![IRB use](https://github.com/chriswhitehouse/gilded_rose_kata/blob/main/screenshots/Screenshot%202021-02-10%20at%2021.22.05.png)
 
 ## Tech/framework used
 Ruby with Rspec testing framework.
