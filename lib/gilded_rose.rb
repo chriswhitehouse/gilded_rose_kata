@@ -29,11 +29,7 @@ class GildedRose
   def extend_logic_to_items
     @items.each do |item|
       item.extend(ItemUpdate)
-      if LOGIC_HASH[item.name]
-        item.extend(LOGIC_HASH[item.name])
-      else
-        item.extend(NormalLogic)
-      end
+      LOGIC_HASH[item.name] ? item.extend(LOGIC_HASH[item.name]) : item.extend(NormalLogic)
     end
   end
 end

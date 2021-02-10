@@ -23,8 +23,4 @@ module ItemUpdate
       return boundary[:rate] if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
     end
   end
-
-  def after_sell_by_date
-    self.sell_in.negative?
-  end
 end
