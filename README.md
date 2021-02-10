@@ -5,6 +5,13 @@ A classic tech test kata; refactor legacy code into high quality code, whilst ad
 To test the ability to pick up a code base, read, interpret, and improve. Ensuring high quality code and implementation, using TDD, OOP, and consistent code style.
 
 ## Design Approach
+Firstly, set up a robust feature and unit test architecture to ensure existing functionality is maintained.
+
+Then refactored out the model. Targeted pushing the update logic into the Item class by extending with an ItemUpdate module.
+
+The specific logic for each item is extended with additional logic modules.
+
+This made the addition of the 'Conjured' item trivial.
 
 ## Build status
 Travis CI: [![Build Status](https://travis-ci.com/chriswhitehouse/gilded_rose_kata.svg?branch=main)](https://travis-ci.com/chriswhitehouse/gilded_rose_kata)
