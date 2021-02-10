@@ -4,15 +4,20 @@ module UpdateNormal
 
   SELL_IN_UPDATE = -1
 
-  QUALITY_UPDATE_BEFORE_SELL_BY_DATE = -1
-  QUALITY_UPDATE_AFTER_SELL_BY_DATE = -2
+  def boundaries
+     [
+    {max: Float::INFINITY, min: 1, rate: -1},
+    {max: 0, min: -Float::INFINITY, rate: -2 },
+    ]
+  end
 
 
   def update_quality
-    update_sell_in
-
-    return unless in_quality_update_range
+    if in_quality_update_range
       self.quality += quality_update_value
+    end
+
+    update_sell_in
   end
 
   private
@@ -26,7 +31,11 @@ module UpdateNormal
   end
 
   def quality_update_value
-    after_sell_by_date ? QUALITY_UPDATE_AFTER_SELL_BY_DATE : QUALITY_UPDATE_BEFORE_SELL_BY_DATE
+    boundaries.each do |boundary|
+      if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
+        return boundary[:rate]
+      end
+    end
   end
 
   def after_sell_by_date

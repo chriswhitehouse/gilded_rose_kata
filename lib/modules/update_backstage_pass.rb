@@ -4,17 +4,22 @@ module UpdateBackstagePass
 
   SELL_IN_UPDATE = -1
 
-  QUALITY_UPDATE_BEFORE_TEN_DAYS = 1
-  QUALITY_UPDATE_BEFORE_FIVE_DAYS = 2
-  QUALITY_UPDATE_BEFORE_ZERO_DAYS = 3
-  QUALITY_UPDATE_AFTER_SELL_BY_DATE = 0
+  def boundaries
+     [
+    {max: Float::INFINITY, min: 11, rate: 1},
+    {max: 10, min: 6, rate: 2},
+    {max: 5, min: 1, rate: 3},
+    {max: 0, min: -Float::INFINITY, rate: -self.quality },
+    ]
+  end
 
 
   def update_quality
-    update_sell_in
-
-    return unless in_quality_update_range
+    if in_quality_update_range
       self.quality += quality_update_value
+    end
+
+    update_sell_in
   end
 
   private
@@ -28,14 +33,10 @@ module UpdateBackstagePass
   end
 
   def quality_update_value
-    if self.sell_in >= 10
-      QUALITY_UPDATE_BEFORE_TEN_DAYS
-    elsif self.sell_in >= 5
-      QUALITY_UPDATE_BEFORE_FIVE_DAYS
-    elsif self.sell_in.positive?
-      QUALITY_UPDATE_BEFORE_ZERO_DAYS
-    else
-      -self.quality
+    boundaries.each do |boundary|
+      if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
+        return boundary[:rate]
+      end
     end
   end
 
