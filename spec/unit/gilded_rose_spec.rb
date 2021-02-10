@@ -3,78 +3,86 @@
 require 'gilded_rose'
 
 describe GildedRose do
-  # let(:apple) { double :item, name: "apple", sell_in: 1, quality: 3 }
-  # let(:banana) { double :item, name: "banana", sell_in: 2, quality: 4 }
-  # let(:aged_brie) { double :item, name: "Aged Brie", sell_in: 1, quality: 5 }
-  # let(:sulfuras) { double :item, name: "Sulfuras, Hand of Ragnaros", sell_in: 1, quality: 80 }
-  # let(:backstage_pass) { double :item, name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 11, quality: 5 }
-  #
-  #
-  # let(:items) { [
-  #                 apple,
-  #                 banana,
-  #                 aged_brie,
-  #                 sulfuras,
-  #                 backstage_pass,
-  #               ] }
-  #
-  # let(:inventory) { GildedRose.new(items) }
+  let(:apple) { double :apple, name: 'apple', sell_in: 1, quality: 3, :sell_in= => true, :quality= => true }
+  let(:sulfuras) { double :item, name: "Sulfuras, Hand of Ragnaros", sell_in: 1, quality: 80, :sell_in= => true, :quality= => true }
+  let(:aged_brie) { double :item, name: "Aged Brie", sell_in: 1, quality: 5, :sell_in= => true, :quality= => true }
+  let(:backstage_pass) { double :item, name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 11, quality: 5, :sell_in= => true, :quality= => true }
+  let(:items) { [apple, sulfuras, aged_brie, backstage_pass] }
+  let(:inventory) { GildedRose.new(items) }
+
 
   describe '#update_quality' do
-    context 'one normal item' do
-      let(:apple) { spy :apple, name: 'apple' }
-      let(:items) { [apple] }
-      let(:inventory) { GildedRose.new(items) }
-
+    context 'Normal Item' do
       it 'does not change the name' do
+        expect(apple).not_to receive(:name=)
         inventory.update_quality
-        expect(apple).not_to have_received(:name=)
       end
 
-
-      it 'does change the sell_in for all items except Sulfuras' do
+      it 'does change the sell_in' do
+        expect(apple).to receive(:sell_in=).with(apple.sell_in - 1)
         inventory.update_quality
-        expect(apple).to have_received(:sell_in=)
       end
 
+      it 'Once the sell by date has passed, Quality degrades twice as fast' do
+        # currently tests implementation rather than behaviour
+        allow(apple).to receive(:sell_in).and_return(-1)
+        expect(apple).to receive(:quality=).with(apple.quality - 1).twice
+        inventory.update_quality
+      end
+
+      it 'The Quality of an item is never negative' do
+        allow(apple).to receive(:quality).and_return(0)
+        expect(apple).not_to receive(:quality=)
+        inventory.update_quality
+      end
     end
 
-    # it 'Once the sell by date has passed, Quality degrades twice as fast' do
-    #   expect { inventory.update_quality }.to change { items[0].quality }.by(-1)
-    #   expect { inventory.update_quality }.to change { items[0].quality }.by(-2)
-    # end
-    #
-    # it 'The Quality of an item is never negative' do
-    #   inventory.update_quality
-    #   inventory.update_quality
-    #   inventory.update_quality
-    #   expect(items[0].quality).not_to be <0
-    # end
-    #
-    # it "'Aged Brie' actually increases in Quality the older it gets" do
-    #   expect { inventory.update_quality }.to change { items[2].quality }.by(1)
-    #   expect { inventory.update_quality }.to change { items[2].quality }.by(2)
-    # end
-    #
-    # it 'The Quality of an item is never more than 50' do
-    #   50.times { inventory.update_quality }
-    #   expect(items[2].quality).not_to be >50
-    # end
-    #
-    # it '"Sulfuras", being a legendary item, never has to be sold or decreases in Quality' do
-    #   expect { inventory.update_quality }.not_to change { items[3].sell_in }
-    #   expect { inventory.update_quality }.not_to change { items[3].quality }
-    # end
-    #
-    # it '"Backstage passes", like aged brie, increases in Quality as its SellIn value approaches;
-    # Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but
-    # Quality drops to 0 after the concert' do
-    #   expect { inventory.update_quality }.to change { items[4].quality }.by(1)
-    #   expect { inventory.update_quality }.to change { items[4].quality }.by(2)
-    #   4.times { inventory.update_quality }
-    #   expect { inventory.update_quality }.to change { items[4].quality }.by(3)
-    #   5.times { inventory.update_quality }
-    #   expect(items[4].quality).to eq 0
-    # end
+    context 'Aged Brie' do
+      it "'Aged Brie' actually increases in Quality the older it gets" do
+        expect(aged_brie).to receive(:quality=).with(aged_brie.quality + 1)
+        inventory.update_quality
+      end
+
+      it 'The Quality of an item is never more than 50' do
+        allow(aged_brie).to receive(:quality).and_return(50)
+        expect(aged_brie).not_to receive(:quality=)
+        inventory.update_quality
+      end
+    end
+
+    context 'Sulfuras' do
+      it '"Sulfuras", being a legendary item, never has to never be sold or decreases in Quality' do
+        expect(sulfuras).not_to receive(:quality=)
+        expect(sulfuras).not_to receive(:sell_in=)
+        inventory.update_quality
+      end
+    end
+
+    context 'Backstage Pass' do
+      it 'increase in quality by 1 with more than 10 days to sell' do
+        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 1)
+        inventory.update_quality
+      end
+
+      it 'increase in quality by 2 with less than 11, and more than 5, days to sell' do
+        # currently tests implementation rather than behaviour
+        allow(backstage_pass).to receive(:sell_in).and_return(10)
+        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 1).twice
+        inventory.update_quality
+      end
+
+      it 'increase in quality by 3 with less than 5, and more than -1, days to sell' do
+        # currently tests implementation rather than behaviour
+        allow(backstage_pass).to receive(:sell_in).and_return(5)
+        expect(backstage_pass).to receive(:quality=).with(backstage_pass.quality + 1).exactly(3).times
+        inventory.update_quality
+      end
+
+      it 'quality drops to 0 after the concert' do
+        allow(backstage_pass).to receive(:sell_in).and_return(-1)
+        expect(backstage_pass).to receive(:quality=).with(0)
+        inventory.update_quality
+      end
+    end
   end
 end
