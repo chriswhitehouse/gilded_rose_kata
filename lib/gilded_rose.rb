@@ -4,56 +4,69 @@
 class GildedRose
   def initialize(items)
     @items = items
+
+    @items.each do |item|
+      case item.name
+      when 'Aged Brie'
+        item.extend(Update_aged_brie)
+      when 'Sulfuras, Hand of Ragnaros'
+        item.extend(Update_sulfuras)
+      when 'Backstage passes to a TAFKAL80ETC concert'
+        item.extend(Update_backstage_pass)
+      else
+        item.extend(Update_normal)
+      end
+    end
   end
 
   def update_quality
     @items.each do |item|
-      case item.name
-      when 'Aged Brie'
-        update_quality_aged_brie(item)
-      when 'Sulfuras, Hand of Ragnaros'
-        update_quality_sulfuras(item)
-      when 'Backstage passes to a TAFKAL80ETC concert'
-        update_quality_backstage_pass(item)
-      else
-        update_quality_normal(item)
-      end
+      item.update_quality
     end
   end
 
   private
 
-  def update_quality_aged_brie(item)
-    item.sell_in -= 1
+  module Update_aged_brie
+    def update_quality
+      self.sell_in -= 1
 
-    return unless item.quality < 50 && item.quality.positive?
+      return unless self.quality < 50 && self.quality.positive?
 
-    item.quality -= item.sell_in.negative? ? -2 : -1
-  end
-
-  def update_quality_sulfuras(item); end
-
-  def update_quality_backstage_pass(item)
-    item.sell_in -= 1
-
-    return unless item.quality < 50 && item.quality.positive?
-
-    if item.sell_in >= 10
-      item.quality += 1
-    elsif item.sell_in >= 5
-      item.quality += 2
-    elsif item.sell_in.positive?
-      item.quality += 3
-    else
-      item.quality = 0
+      self.quality -= self.sell_in.negative? ? -2 : -1
     end
   end
 
-  def update_quality_normal(item)
-    item.sell_in -= 1
+  module Update_sulfuras
+    def update_quality
+    end
+  end
 
-    return unless item.quality < 50 && item.quality.positive?
+  module Update_backstage_pass
+    def update_quality
+      self.sell_in -= 1
 
-    item.quality -= item.sell_in.negative? ? 2 : 1
+      return unless self.quality < 50 && self.quality.positive?
+
+      if self.sell_in >= 10
+        self.quality += 1
+      elsif self.sell_in >= 5
+        self.quality += 2
+      elsif self.sell_in.positive?
+        self.quality += 3
+      else
+        self.quality = 0
+      end
+    end
+  end
+
+  module Update_normal
+    def update_quality
+      self.sell_in -= 1
+
+      return unless self.quality < 50 && self.quality.positive?
+
+      self.quality -= self.sell_in.negative? ? 2 : 1
+    end
   end
 end
