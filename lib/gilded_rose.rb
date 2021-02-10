@@ -1,8 +1,9 @@
 # frozen_string_literal: true
-require './lib/modules/aged_brie_logic.rb'
-require './lib/modules/sulfuras_logic.rb'
-require './lib/modules/normal_logic.rb'
-require './lib/modules/backstage_pass_logic.rb'
+require './lib/modules/item_logic/aged_brie.rb'
+require './lib/modules/item_logic/sulfuras.rb'
+require './lib/modules/item_logic/backstage_pass.rb'
+require './lib/modules/item_logic/normal.rb'
+
 require './lib/modules/item_update.rb'
 # A class for updating items
 class GildedRose
