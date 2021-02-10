@@ -1,34 +1,39 @@
 # frozen_string_literal: true
-require './lib/modules/item_logic/aged_brie.rb'
-require './lib/modules/item_logic/sulfuras.rb'
-require './lib/modules/item_logic/backstage_pass.rb'
-require './lib/modules/item_logic/normal.rb'
 
-require './lib/modules/item_update.rb'
+require './lib/modules/item_logic/aged_brie'
+require './lib/modules/item_logic/sulfuras'
+require './lib/modules/item_logic/backstage_pass'
+require './lib/modules/item_logic/normal'
+
+require './lib/modules/item_update'
 # A class for updating items
 class GildedRose
+  LOGIC_HASH = {
+    'Aged Brie' => AgedBrieLogic,
+    'Sulfuras, Hand of Ragnaros' => SulfurasLogic,
+    'Backstage passes to a TAFKAL80ETC concert' => BackstagePassLogic
+  }.freeze
+
   def initialize(items)
     @items = items
 
-    @items.each do |item|
-      item.extend(ItemUpdate)
-
-      case item.name
-      when 'Aged Brie'
-        item.extend(AgedBrieLogic)
-      when 'Sulfuras, Hand of Ragnaros'
-        item.extend(SulfurasLogic)
-      when 'Backstage passes to a TAFKAL80ETC concert'
-        item.extend(BackstagePassLogic)
-      else
-        item.extend(NormalLogic)
-      end
-    end
+    extend_logic_to_items
   end
 
   def update_quality
+    @items.each(&:update_quality)
+  end
+
+  private
+
+  def extend_logic_to_items
     @items.each do |item|
-      item.update_quality
+      item.extend(ItemUpdate)
+      if LOGIC_HASH[item.name]
+        item.extend(LOGIC_HASH[item.name])
+      else
+        item.extend(NormalLogic)
+      end
     end
   end
 end

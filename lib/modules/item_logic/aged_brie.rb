@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Logic for Aged Brie item
 module AgedBrieLogic
   MAX_QUALITY = 50
   MIN_QUALITY = 0
@@ -6,8 +9,8 @@ module AgedBrieLogic
 
   def quality_logic
     [
-   {max: Float::INFINITY, min: 1, rate: 1},
-   {max: 0, min: -Float::INFINITY, rate: 2 },
+      { max: Float::INFINITY, min: 1, rate: 1 },
+      { max: 0, min: -Float::INFINITY, rate: 2 }
     ]
   end
 end

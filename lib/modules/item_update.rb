@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
+# Module to add update logic to Item class
 module ItemUpdate
   def update_quality
-    if in_quality_update_range
-      self.quality += quality_update_value
-    end
+    self.quality += quality_update_value if in_quality_update_range
 
     update_sell_in
   end
@@ -19,9 +20,7 @@ module ItemUpdate
 
   def quality_update_value
     quality_logic.each do |boundary|
-      if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
-        return boundary[:rate]
-      end
+      return boundary[:rate] if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
     end
   end
 
