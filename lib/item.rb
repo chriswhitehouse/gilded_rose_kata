@@ -1,4 +1,6 @@
+# frozen_string_literal: true
 
+# A class to record properties of an item
 class Item
   attr_accessor :name, :sell_in, :quality
 

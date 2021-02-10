@@ -4,12 +4,16 @@ require 'gilded_rose'
 
 describe GildedRose do
   let(:apple) { double :apple, name: 'apple', sell_in: 1, quality: 3, :sell_in= => true, :quality= => true }
-  let(:sulfuras) { double :item, name: "Sulfuras, Hand of Ragnaros", sell_in: 1, quality: 80, :sell_in= => true, :quality= => true }
-  let(:aged_brie) { double :item, name: "Aged Brie", sell_in: 1, quality: 5, :sell_in= => true, :quality= => true }
-  let(:backstage_pass) { double :item, name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 11, quality: 5, :sell_in= => true, :quality= => true }
+  let(:sulfuras) do
+    double :item, name: 'Sulfuras, Hand of Ragnaros', sell_in: 1, quality: 80, :sell_in= => true, :quality= => true
+  end
+  let(:aged_brie) { double :item, name: 'Aged Brie', sell_in: 1, quality: 5, :sell_in= => true, :quality= => true }
+  let(:backstage_pass) do
+    double :item, name: 'Backstage passes to a TAFKAL80ETC concert', sell_in: 11, quality: 5, :sell_in= => true,
+                  :quality= => true
+  end
   let(:items) { [apple, sulfuras, aged_brie, backstage_pass] }
   let(:inventory) { GildedRose.new(items) }
-
 
   describe '#update_quality' do
     context 'Normal Item' do

@@ -1,20 +1,24 @@
+# frozen_string_literal: true
+
 require 'gilded_rose'
 
 describe 'Feature Tests' do
-  let(:items) { [
-                  Item.new("apple", 1, 3),
-                  Item.new("banana", 2, 4),
-                  Item.new("Aged Brie", 1, 5),
-                  Item.new("Sulfuras, Hand of Ragnaros", 1, 80),
-                  Item.new("Backstage passes to a TAFKAL80ETC concert", 11, 5),
-                ] }
+  let(:items) do
+    [
+      Item.new('apple', 1, 3),
+      Item.new('banana', 2, 4),
+      Item.new('Aged Brie', 1, 5),
+      Item.new('Sulfuras, Hand of Ragnaros', 1, 80),
+      Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 5)
+    ]
+  end
 
   let(:inventory) { GildedRose.new(items) }
 
   describe 'So that I can keep track of my stock' do
     it 'I want to maintain an inventory of items' do
       expect(items[0]).to be_a Item
-      expect(items[1].name).to eq "banana"
+      expect(items[1].name).to eq 'banana'
     end
   end
 
@@ -33,7 +37,7 @@ describe 'Feature Tests' do
   end
 
   describe 'So that I can maintain a current view of quality and sellIn' do
-    it "I want to be able to update quality of every item in the inventory at the end of each day" do
+    it 'I want to be able to update quality of every item in the inventory at the end of each day' do
       expect { inventory.update_quality }.to change { items[0].quality }.by(-1)
       expect { inventory.update_quality }.to change { items[1].quality }.by(-1)
     end
@@ -78,8 +82,7 @@ describe 'Feature Tests' do
       39.times { inventory.update_quality }
 
       # After 51st Quality update
-      expect(items[2].quality).not_to be >50
-
+      expect(items[2].quality).not_to be > 50
     end
   end
 end
