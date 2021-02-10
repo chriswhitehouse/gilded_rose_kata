@@ -12,13 +12,13 @@ module UpdateSulfuras
     update_sell_in
 
     return unless in_quality_update_range
-      self.quality -= quality_update_value
+      self.quality += quality_update_value
   end
 
   private
 
   def update_sell_in
-    self.sell_in -= SELL_IN_UPDATE
+    self.sell_in += SELL_IN_UPDATE
   end
 
   def in_quality_update_range
