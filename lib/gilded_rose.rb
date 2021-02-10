@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './lib/item.rb'
+
 require './lib/modules/item_logic/aged_brie'
 require './lib/modules/item_logic/sulfuras'
 require './lib/modules/item_logic/backstage_pass'

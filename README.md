@@ -120,6 +120,35 @@ end
 ```
 
 After:
+```ruby
+class GildedRose
+  LOGIC_HASH = {
+    'Aged Brie' => AgedBrieLogic,
+    'Sulfuras, Hand of Ragnaros' => SulfurasLogic,
+    'Backstage passes to a TAFKAL80ETC concert' => BackstagePassLogic,
+    'Conjured' => ConjuredLogic
+  }.freeze
+
+  def initialize(items)
+    @items = items
+
+    extend_logic_to_items
+  end
+
+  def update_quality
+    @items.each(&:update_quality)
+  end
+
+  private
+
+  def extend_logic_to_items
+    @items.each do |item|
+      item.extend(ItemUpdate)
+      LOGIC_HASH[item.name] ? item.extend(LOGIC_HASH[item.name]) : item.extend(NormalLogic)
+    end
+  end
+end
+```
 
 ## Installation
 * Clone the repo.
@@ -129,14 +158,13 @@ After:
 Test can be run with:
 `$ rspec`
 
-[] examples, [] failures, []% coverage.
+18 examples, 0 failures, 99.45% coverage.
 
 ## How to use?
 Use in irb:
 
 `$ irb`
 `> require './lib/gilded_rose.rb'`
-`> require './lib/item.rb'`
 `> apple = item.new("apple", 10, 10)`
 `> banana = item.new("banana", 20, 5)`
 `> items = [apple, banana]`
