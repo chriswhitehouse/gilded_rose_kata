@@ -1,5 +1,8 @@
 # frozen_string_literal: true
-
+require './lib/modules/update_aged_brie.rb'
+require './lib/modules/update_sulfuras.rb'
+require './lib/modules/update_backstage_pass.rb'
+require './lib/modules/update_normal.rb'
 # A class for updating items
 class GildedRose
   def initialize(items)
@@ -8,13 +11,13 @@ class GildedRose
     @items.each do |item|
       case item.name
       when 'Aged Brie'
-        item.extend(Update_aged_brie)
+        item.extend(UpdateAgedBrie)
       when 'Sulfuras, Hand of Ragnaros'
-        item.extend(Update_sulfuras)
+        item.extend(UpdateSulfuras)
       when 'Backstage passes to a TAFKAL80ETC concert'
-        item.extend(Update_backstage_pass)
+        item.extend(UpdateBackstagePass)
       else
-        item.extend(Update_normal)
+        item.extend(UpdateNormal)
       end
     end
   end
@@ -22,51 +25,6 @@ class GildedRose
   def update_quality
     @items.each do |item|
       item.update_quality
-    end
-  end
-
-  private
-
-  module Update_aged_brie
-    def update_quality
-      self.sell_in -= 1
-
-      return unless self.quality < 50 && self.quality.positive?
-
-      self.quality -= self.sell_in.negative? ? -2 : -1
-    end
-  end
-
-  module Update_sulfuras
-    def update_quality
-    end
-  end
-
-  module Update_backstage_pass
-    def update_quality
-      self.sell_in -= 1
-
-      return unless self.quality < 50 && self.quality.positive?
-
-      if self.sell_in >= 10
-        self.quality += 1
-      elsif self.sell_in >= 5
-        self.quality += 2
-      elsif self.sell_in.positive?
-        self.quality += 3
-      else
-        self.quality = 0
-      end
-    end
-  end
-
-  module Update_normal
-    def update_quality
-      self.sell_in -= 1
-
-      return unless self.quality < 50 && self.quality.positive?
-
-      self.quality -= self.sell_in.negative? ? 2 : 1
     end
   end
 end
