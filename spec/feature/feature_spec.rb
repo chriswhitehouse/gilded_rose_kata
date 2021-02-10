@@ -40,44 +40,46 @@ describe 'Feature Tests' do
   end
 
   describe 'Acceptance Criteria' do
-    it 'Once the sell by date has passed, Quality degrades twice as fast' do
-      expect { inventory.update_quality }.to change { items[0].quality }.by(-1)
-      expect { inventory.update_quality }.to change { items[0].quality }.by(-2)
-    end
+    it 'manages a portfolio of items over time' do
+      # First quality_update
+      expect { inventory.update_quality }
+        .to change { items[0].quality }.by(-1)
+        .and change { items[1].quality }.by(-1)
+        .and change { items[2].quality }.by(1)
+        .and change { items[3].sell_in }.by(0)
+        .and change { items[4].quality }.by(1)
 
-    it 'The Quality of an item is never negative' do
-      inventory.update_quality
-      inventory.update_quality
-      inventory.update_quality
-      expect(items[0].quality).not_to be <0
-    end
+      # Second quality_update
+      expect { inventory.update_quality }
+        .to change { items[0].quality }.by(-2)
+        .and change { items[1].quality }.by(-1)
+        .and change { items[2].quality }.by(2)
+        .and change { items[3].quality }.by(0)
+        .and change { items[4].quality }.by(2)
 
-    it "'Aged Brie' actually increases in Quality the older it gets" do
-      expect { inventory.update_quality }.to change { items[2].quality }.by(1)
-      expect { inventory.update_quality }.to change { items[2].quality }.by(2)
-    end
+      # Third quality_update
+      expect { inventory.update_quality }
+        .to change { items[0].quality }.by(0)
+        .and change { items[1].quality }.by(-2)
+        .and change { items[2].quality }.by(2)
+        .and change { items[3].quality }.by(0)
+        .and change { items[4].quality }.by(2)
 
-    it 'The Quality of an item is never more than 50' do
-      50.times { inventory.update_quality }
-      expect(items[2].quality).not_to be >50
-    end
+      3.times { inventory.update_quality }
 
-    it '"Sulfuras", being a legendary item, never has to be sold or decreases in Quality' do
-      expect { inventory.update_quality }.not_to change { items[3].sell_in }
-      expect { inventory.update_quality }.not_to change { items[3].quality }
-    end
-
-    it '"Backstage passes", like aged brie, increases in Quality as its SellIn value approaches;
-    Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but
-    Quality drops to 0 after the concert' do
-      expect { inventory.update_quality }.to change { items[4].quality }.by(1)
-      expect { inventory.update_quality }.to change { items[4].quality }.by(2)
-      4.times { inventory.update_quality }
+      # Seventh Quality Update
       expect { inventory.update_quality }.to change { items[4].quality }.by(3)
+
       5.times { inventory.update_quality }
+
+      # After 12th Quality Update
       expect(items[4].quality).to eq 0
+
+      39.times { inventory.update_quality }
+
+      # After 51st Quality update
+      expect(items[2].quality).not_to be >50
 
     end
   end
-
 end
