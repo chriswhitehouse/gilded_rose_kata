@@ -4,11 +4,8 @@ module UpdateNormal
 
   SELL_IN_UPDATE = -1
 
-  def boundaries
-     [
-    {max: Float::INFINITY, min: 1, rate: -1},
-    {max: 0, min: -Float::INFINITY, rate: -2 },
-    ]
+  def boundaries(logic)
+    @logic = logic
   end
 
 
@@ -31,7 +28,7 @@ module UpdateNormal
   end
 
   def quality_update_value
-    boundaries.each do |boundary|
+    @logic.each do |boundary|
       if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
         return boundary[:rate]
       end

@@ -18,6 +18,10 @@ class GildedRose
         item.extend(UpdateBackstagePass)
       else
         item.extend(UpdateNormal)
+        item.boundaries([
+                     {max: Float::INFINITY, min: 1, rate: -1},
+                     {max: 0, min: -Float::INFINITY, rate: -2 },
+                     ])
       end
     end
   end
