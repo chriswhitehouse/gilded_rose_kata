@@ -9,8 +9,8 @@ module ConjuredLogic
 
   def quality_logic
     [
-      { max: Float::INFINITY, min: 1, rate: -2 },
-      { max: 0, min: -Float::INFINITY, rate: -4 }
+      { max_sell_in: Float::INFINITY, min_sell_in: 1, change_rate: -2 },
+      { max_sell_in: 0, min_sell_in: -Float::INFINITY, change_rate: -4 }
     ]
   end
 end

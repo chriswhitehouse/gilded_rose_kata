@@ -20,7 +20,7 @@ module ItemUpdate
 
   def quality_update_value
     quality_logic.each do |boundary|
-      return boundary[:rate] if self.sell_in <= boundary[:max] && self.sell_in >= boundary[:min]
+      return boundary[:change_rate] if self.sell_in <= boundary[:max_sell_in] && self.sell_in >= boundary[:min_sell_in]
     end
   end
 end

@@ -9,7 +9,7 @@ module SulfurasLogic
 
   def quality_logic
     [
-      { max: Float::INFINITY, min: -Float::INFINITY, rate: 0 }
+      { max_sell_in: Float::INFINITY, min_sell_in: -Float::INFINITY, change_rate: 0 }
     ]
   end
 end

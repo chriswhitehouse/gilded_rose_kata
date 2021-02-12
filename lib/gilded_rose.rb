@@ -1,14 +1,7 @@
 # frozen_string_literal: true
-
+Dir[File.join(__dir__, '/modules/item_logic/', '*.rb')].each { |file| require file }
+require './lib/modules/item_update_mixin.rb'
 require './lib/item.rb'
-
-require './lib/modules/item_logic/aged_brie'
-require './lib/modules/item_logic/sulfuras'
-require './lib/modules/item_logic/backstage_pass'
-require './lib/modules/item_logic/conjured'
-require './lib/modules/item_logic/normal'
-
-require './lib/modules/item_update'
 # A class for updating items
 class GildedRose
   LOGIC_HASH = {
